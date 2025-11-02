@@ -27,7 +27,7 @@ pipeline {
 
     stage('SonarQube Analysis') {
       steps {
-        withSonarQubeEnv('SonarQube') {
+        withSonarQubeEnv('sonarserver') {
           bat '''
             call .venv\\Scripts\\activate
             sonar-scanner
