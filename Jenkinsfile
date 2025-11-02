@@ -17,7 +17,7 @@ pipeline {
     stage('Install dependencies & Unit Tests') {
       steps {
         bat '''
-          python -m venv .venv
+          "C:\\Users\\ishum\\AppData\\Local\\Programs\\Python\\Python313\\python.exe" -m venv .venv
           call .venv\\Scripts\\activate
           pip install -r requirements.txt
           pytest -q
