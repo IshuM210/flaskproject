@@ -16,16 +16,22 @@ pipeline {
 
     stage('Install dependencies & Unit Tests') {
       steps {
-        sh 'python3 -m venv .venv || true'
-        sh '. .venv/bin/activate && pip install -r requirements.txt'
-        sh '. .venv/bin/activate && pytest -q'
+        bat '''
+          python -m venv .venv
+          call .venv\\Scripts\\activate
+          pip install -r requirements.txt
+          pytest -q
+        '''
       }
     }
 
     stage('SonarQube Analysis') {
       steps {
         withSonarQubeEnv('SonarQube') {
-          sh 'sonar-scanner'
+          bat '''
+            call .venv\\Scripts\\activate
+            sonar-scanner
+          '''
         }
       }
     }
@@ -45,26 +51,30 @@ pipeline {
 
     stage('Build Docker Image') {
       steps {
-        sh "docker build -t ${env.DOCKER_IMAGE}:${env.DOCKER_TAG} ."
+        bat "docker build -t ${env.DOCKER_IMAGE}:${env.DOCKER_TAG} ."
       }
     }
 
     stage('Push to DockerHub') {
       steps {
         withCredentials([usernamePassword(credentialsId: env.DOCKERHUB_CREDENTIALS, usernameVariable: 'USER', passwordVariable: 'PASS')]) {
-          sh "echo $PASS | docker login -u $USER --password-stdin"
-          sh "docker push ${env.DOCKER_IMAGE}:${env.DOCKER_TAG}"
-          sh "docker tag ${env.DOCKER_IMAGE}:${env.DOCKER_TAG} ${env.DOCKER_IMAGE}:latest"
-          sh "docker push ${env.DOCKER_IMAGE}:latest"
-          sh "docker logout"
+          bat """
+            echo %PASS% | docker login -u %USER% --password-stdin
+            docker push ${env.DOCKER_IMAGE}:${env.DOCKER_TAG}
+            docker tag ${env.DOCKER_IMAGE}:${env.DOCKER_TAG} ${env.DOCKER_IMAGE}:latest
+            docker push ${env.DOCKER_IMAGE}:latest
+            docker logout
+          """
         }
       }
     }
 
     stage('Deploy (local)') {
       steps {
-        sh 'docker rm -f ci-cd-demo || true'
-        sh "docker run -d --name ci-cd-demo -p 5000:5000 ${env.DOCKER_IMAGE}:${env.DOCKER_TAG}"
+        bat """
+          docker rm -f ci-cd-demo || exit 0
+          docker run -d --name ci-cd-demo -p 5000:5000 ${env.DOCKER_IMAGE}:${env.DOCKER_TAG}
+        """
       }
     }
   }
