@@ -30,7 +30,7 @@ pipeline {
         withSonarQubeEnv('sonarserver') {
           bat '''
             call .venv\\Scripts\\activate
-            sonar-scanner
+            sonar-scanner -Dproject.settings=sonar-project.properties
           '''
         }
       }
