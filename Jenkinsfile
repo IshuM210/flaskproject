@@ -1,6 +1,6 @@
 pipeline {
     agent any
-
+ 
     environment {
         DOCKER_IMAGE = "ishwaryamallesh/flaskproject"
         DOCKER_TAG = "${env.BUILD_NUMBER}"
