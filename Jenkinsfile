@@ -17,18 +17,14 @@ pipeline {
         stage('Install dependencies & Unit Tests') {
             steps {
                 // Use bash shell explicitly
-                sh '''#!/bin/bash
-                    set -e
-                    sudo apt update -y
-                    sudo apt install -y python3.12-venv
-
-                    python3 -m venv .venv
-                    source .venv/bin/activate
-
-                    pip install --upgrade pip
-                    pip install -r requirements.txt
-                    pytest -q --junitxml=report.xml
-                '''
+                    sh '''#!/bin/bash
+                           set -e
+                           python3 -m venv .venv
+                           source .venv/bin/activate
+                           pip install --upgrade pip
+                           pip install -r requirements.txt
+                           pytest -q --junitxml=report.xml
+                    '''
             }
         }
 
