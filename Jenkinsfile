@@ -34,7 +34,7 @@ pipeline {
                     sh '''#!/bin/bash
                         set -e
                         source .venv/bin/activate
-                        sonar-scanner -Dproject.settings=sonar-project.properties
+                        /opt/sonar-scanner/bin/sonar-scanner -Dproject.settings=sonar-project.properties
                     '''
                 }
             }
