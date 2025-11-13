@@ -24,7 +24,7 @@ pipeline {
                     sonar-scanner \
                     -Dsonar.projectKey=flaskproject \
                     -Dsonar.sources=. \
-                    -Dsonar.host.url=http://localhost:9000 \
+                    -Dsonar.host.url=http://172.22.147.80:9000 \
                     -Dsonar.login=$SONARQUBE
                     '''
                 }
