@@ -16,7 +16,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             environment {
-                SONARQUBE = credentials('sonartoken')
+                SONARQUBE = credentials('sonartoken2')
             }
             steps {
                 withSonarQubeEnv('sonarserver') {
